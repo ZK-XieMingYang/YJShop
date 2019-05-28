@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.qhit.ordersItem.dao.IOrdersItemDao"> 
+	<!-- 自定义结果集 --> 
+	<resultMap id="BaseResultMap" type="com.qhit.ordersItem.pojo.OrdersItem"> 
+		<id property="itemId" column="item_id" javaType="java.lang.Integer"></id> 
+		<result property="amount" column="amount" javaType="java.lang.Integer"></result> 
+		<result property="unitprice" column="unitprice" javaType="java.lang.Double"></result> 
+		<result property="subtotal" column="subtotal" javaType="java.lang.Double"></result> 
+		<result property="gid" column="gid" javaType="java.lang.Integer"></result> 
+		<result property="oid" column="oid" javaType="java.lang.Integer"></result> 
+	</resultMap> 
+
+	<!-- 在各种标签中，id属性必须与接口中的方法名一样，id的值必须是唯一的，parameterType指查询时使用的参数类型， 
+	resultType属性指明查询返回的结果集类型    --> 
+ 
+	<sql id="Base_Column_List" > 
+		item_id,amount,unitprice,subtotal,gid,oid 
+	</sql> 
+	<select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where item_id = #{itemId} 
+	</select> 
+	<delete id="delete" parameterType="java.lang.Integer" > 
+		delete from orders_item 
+		where item_id = #{itemId} 
+	</delete> 
+	<insert id="insert" parameterType="com.qhit.ordersItem.pojo.OrdersItem" > 
+		insert into orders_item(amount,unitprice,subtotal,gid,oid) 
+		values (#{amount},#{unitprice},#{subtotal},#{gid},#{oid}) 
+	</insert> 
+	<update id="updateSelective" parameterType="com.qhit.ordersItem.pojo.OrdersItem" > 
+		update orders_item 
+		<set > 
+			<if test="amount != null and amount!='' " > 
+				amount = #{amount}, 
+			</if> 
+			<if test="unitprice != null and unitprice!='' " > 
+				unitprice = #{unitprice}, 
+			</if> 
+			<if test="subtotal != null and subtotal!='' " > 
+				subtotal = #{subtotal}, 
+			</if> 
+			<if test="gid != null and gid!='' " > 
+				gid = #{gid}, 
+			</if> 
+			<if test="oid != null and oid!='' " > 
+				oid = #{oid}, 
+			</if> 
+		</set> 
+		where item_id = #{itemId} 
+	</update> 
+	<update id="update" parameterType="com.qhit.ordersItem.pojo.OrdersItem" > 
+		update orders_item 
+		set  amount = #{amount}, unitprice = #{unitprice}, subtotal = #{subtotal}, gid = #{gid}, oid = #{oid} 
+		where item_id = #{itemId} 
+	</update> 
+	<select id="findAll" resultMap="BaseResultMap" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+	</select> 
+	<select id="findByAmount" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where amount = #{amount} 
+	</select> 
+	<select id="findByUnitprice" resultMap="BaseResultMap" parameterType="java.lang.Double" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where unitprice = #{unitprice} 
+	</select> 
+	<select id="findBySubtotal" resultMap="BaseResultMap" parameterType="java.lang.Double" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where subtotal = #{subtotal} 
+	</select> 
+	<select id="findByGid" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where gid = #{gid} 
+	</select> 
+	<select id="findByOid" resultMap="BaseResultMap" parameterType="java.lang.Integer" > 
+		select 
+		<include refid="Base_Column_List" /> 
+		from orders_item 
+		where oid = #{oid} 
+	</select> 
+	<delete id="deleteBatch" parameterType="java.util.Arrays"> 
+		delete from orders_item where item_id in 
+		<foreach collection="array" item="id" open="(" close=")" separator=","> 
+			#{id} 
+		</foreach> 
+	</delete> 
+	<select id="search" parameterType="com.qhit.ordersItem.pojo.OrdersItem" resultMap="BaseResultMap"> 
+		select * from  orders_item 
+		<where > 
+			<if test="amount != null and amount!='' " > 
+				 and amount = #{amount} 
+			</if> 
+			<if test="unitprice != null and unitprice!='' " > 
+				 and unitprice = #{unitprice} 
+			</if> 
+			<if test="subtotal != null and subtotal!='' " > 
+				 and subtotal = #{subtotal} 
+			</if> 
+			<if test="gid != null and gid!='' " > 
+				 and gid = #{gid} 
+			</if> 
+			<if test="oid != null and oid!='' " > 
+				 and oid = #{oid} 
+			</if> 
+		</where> 
+	</select> 
+</mapper> 
